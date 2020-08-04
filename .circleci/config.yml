@@ -15,7 +15,7 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
           name: Push Docker image
-          command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest .
+          command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
 workflows:
   version: 2
   default:
