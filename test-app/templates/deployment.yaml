@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: {{ template "name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+  name: {{ template "fullname" . }}
+spec:
+  replicas: {{ .Values.server.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+      component: server
+  template:
+    metadata:
+    {{- if .Values.server.podAnnotations }}
+      annotations:
+{{ toYaml .Values.server.podAnnotations | indent 8 }}
+    {{- end }}
+      labels:
+        helm.sh/chart: {{ template "name" . }}
+        app.kubernetes.io/name: {{ template "name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        component: server
+    spec:
+      containers:
+        - name: {{ template "name" . }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+          ports:
+            - containerPort: 3000
+          resources:
+{{ toYaml .Values.server.resources | indent 12 }}

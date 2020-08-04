@@ -1,0 +1,17 @@
+image:
+  repository: ryanwholey/test-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+server:
+  extraArgs: {}
+
+  podAnnotations: {}
+  eplicaCount: 1
+
+  resources: {}
+  port: 3000
+
+service:
+  annotations: {}
+  type: ClusterIP

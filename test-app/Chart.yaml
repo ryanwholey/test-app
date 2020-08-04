@@ -1,0 +1,10 @@
+  
+apiVersion: v1
+description: A helm chart for a test app
+icon: https://www.elastic.co/assets/blt27d1fd26b0862613/icon-auditbeat-bb.svg
+name: test-app
+version: 0.0.1
+appVersion: 0.0.1
+maintainers:
+- name: ryanwholey
+  email: rjwholey@gmail.com
