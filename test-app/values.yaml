@@ -7,7 +7,7 @@ server:
   extraArgs: {}
 
   podAnnotations: {}
-  eplicaCount: 1
+  replicaCount: 1
 
   resources: {}
   port: 3000
