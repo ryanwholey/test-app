@@ -1,0 +1,26 @@
+version: 2.1
+jobs:
+  build_and_push:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+        name: Build Docker image
+        command: docker build -t $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest .
+      - run:
+        name: Docker login
+        command: |
+          echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdindocker login
+      - run:
+        name: Push Docker image
+        command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest .
+workflows:
+  version: 2
+  default:
+    jobs:
+      - build_and_push:
+          filters:
+            branches:
+              only: master
