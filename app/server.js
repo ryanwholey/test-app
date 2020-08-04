@@ -4,7 +4,7 @@ const config = require('./config')
 
 const path = require('path')
 
-const Hapi = require('hapi')
+const Hapi = require('@hapi/hapi')
 const HapiRouter = require('hapi-router')
 
 async function initServer() {
@@ -13,6 +13,8 @@ async function initServer() {
         port: config.port,
     })
     
+    await server.register(require('@hapi/inert')) 
+
     await server.register([
         {
             plugin: HapiRouter,
