@@ -10,12 +10,18 @@ jobs:
           name: Build Docker image
           command: docker build . -t $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
       - run:
+          name: Build Docker image latest
+          command: docker build . -t $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
+      - run:
           name: Docker login
           command: |
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
       - run:
-          name: Push Docker image
+          name: Push Docker push git ref
           command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+      - run:
+          name: Push Docker push latest
+          command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:latest
 workflows:
   version: 2
   default:
