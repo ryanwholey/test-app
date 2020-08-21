@@ -34,6 +34,7 @@ workflows:
             branches:
               only: master
       - publish_config:
+          context: publish
           filters:
             branches:
-              only: maste
+              only: master
