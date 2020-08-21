@@ -19,11 +19,23 @@ jobs:
       - run:
           name: Push Docker push git ref
           command: docker push $DOCKERHUB_USERNAME/$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1
+  publish_config:
+    docker:
+      - image: ryanwholey/image-tag-updater:0.0.1
+    steps:
+      - run: /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
 workflows:
   version: 2
   default:
     jobs:
       - build_and_push:
+          filters:
+            branches:
+              only: master
+      - publish_config:
+          context: publish
+          requires:
+            - build_and_push
           filters:
             branches:
               only: master
