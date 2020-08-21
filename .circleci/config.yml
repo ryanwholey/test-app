@@ -1,15 +1,15 @@
-orbs:
-  slack: circleci/slack@3.4.2
 version: 2.1
 jobs:
   build_and_push:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
-      - slack/notify:
-          channel: $SLACK_CHANNEL_ID
-          color: '#42e2f4'
-          message: Starting $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1 build
+      - run: |
+          curl -X POST \
+            -H "Content-type: application/json" \
+            -H "Authorization: Bearer $SLACK_APP_TOKEN" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Starting build for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            https://slack.com/api/chat.postMessage
       - checkout
       - setup_remote_docker
       - run:
@@ -29,10 +29,12 @@ jobs:
     docker:
       - image: ryanwholey/image-tag-updater:0.0.1
     steps:
-      - slack/notify:
-          channel: $SLACK_CHANNEL_ID
-          color: '#42e2f4'
-          message: Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1 build
+      - run: |
+          curl -X POST \
+            -H "Content-type: application/json" \
+            -H "Authorization: Bearer $SLACK_APP_TOKEN" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            https://slack.com/api/chat.postMessage
       - run: /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
 workflows:
   version: 2
