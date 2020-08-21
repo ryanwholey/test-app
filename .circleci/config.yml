@@ -10,7 +10,6 @@ jobs:
           channel: $SLACK_CHANNEL_ID
           color: '#42e2f4'
           message: Starting $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1 build
-          webhook: $SLACK_WEBHOOK
       - checkout
       - setup_remote_docker
       - run:
@@ -34,7 +33,6 @@ jobs:
           channel: $SLACK_CHANNEL_ID
           color: '#42e2f4'
           message: Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1 build
-          webhook: $SLACK_WEBHOOK
       - run: /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
 workflows:
   version: 2
