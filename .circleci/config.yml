@@ -8,7 +8,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Starting build for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":hammer_and_pick: Starting build for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - checkout
       - setup_remote_docker
@@ -33,7 +33,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
@@ -45,7 +45,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config to STAGING for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config to STAGING for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
