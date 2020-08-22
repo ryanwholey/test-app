@@ -57,10 +57,10 @@ jobs:
           argocd login
 
           echo "Running as ArgoCD User:"
-          argocd account get-user-info --plaintext
+          argocd account get-user-info --grpc-web
           
-          argocd app sync $CIRCLE_PROJECT_REPONAME-staging --plaintext
-          argocd app wait $CIRCLE_PROJECT_REPONAME-staging --health --plaintext
+          argocd app sync $CIRCLE_PROJECT_REPONAME-staging --grpc-web
+          argocd app wait $CIRCLE_PROJECT_REPONAME-staging --health --grpc-web
 workflows:
   version: 2
   default:
