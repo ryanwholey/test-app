@@ -54,8 +54,6 @@ jobs:
       - image: argoproj/argocd:v1.6.0
     steps:
       - run: |
-          argocd login
-
           echo "Running as ArgoCD User:"
           argocd account get-user-info --grpc-web
           
