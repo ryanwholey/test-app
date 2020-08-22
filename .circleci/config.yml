@@ -4,13 +4,14 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
+      - checkout
       - run: |
+          GIT_HISTORY=$(git log --pretty=format:"%h - %an, %ar : %s" -n 3 | cat)
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\": \"$SLACK_CHANNEL_ID\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":hammer_and_pick: Starting build: <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"} } ], \"attachments\": [{\"color\": \"#D3D3D3\", \"title\": \"CircleCI Build\", \"title_link\": \"$CIRCLE_BUILD_URL\", \"fields\": [{\"title\": \"Author\", \"value\": \"$CIRCLE_USERNAME\", \"short\": false } ] } ] }" \
+            --data "{\"channel\": \"$SLACK_CHANNEL_ID\", \"blocks\": [{\"type\": \"section\", \"text\": {\"type\": \"mrkdwn\", \"text\": \":hammer_and_pick: Starting build: <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"} } ], \"attachments\": [{\"color\": \"#D3D3D3\", \"title\": \"CircleCI Build\", \"title_link\": \"$CIRCLE_BUILD_URL\", \"fields\": [{\"title\": \"Author\", \"value\": \"$CIRCLE_USERNAME\", \"short\": false }, {\"title\": \"History\", \"value\": \"$GIT_HISTORY\", \"short\": false } ] } ] }" \
             https://slack.com/api/chat.postMessage
-      - checkout
       - setup_remote_docker
       - run:
           name: Build Docker image
