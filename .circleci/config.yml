@@ -36,7 +36,7 @@ jobs:
             --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
-        /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
+          /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
   merge_staging:
     docker:
       - image: ryanwholey/merge-release:latest
@@ -48,7 +48,7 @@ jobs:
             --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
-        /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
+          /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
 workflows:
   version: 2
   default:
