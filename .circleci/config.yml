@@ -34,7 +34,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config for <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
@@ -46,7 +46,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config to STAGING for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config to STAGING for <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
@@ -60,6 +60,7 @@ jobs:
           
           argocd app sync $CIRCLE_PROJECT_REPONAME-staging --grpc-web
           argocd app wait $CIRCLE_PROJECT_REPONAME-staging --health --grpc-web
+          echo $?
 workflows:
   version: 2
   default:
