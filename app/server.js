@@ -36,4 +36,6 @@ async function initServer() {
     return server
 }
 
+throw new Error('ERROR')
+
 initServer()
