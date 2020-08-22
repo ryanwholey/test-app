@@ -1,0 +1,32 @@
+{
+  "channel": "C0191LZH09F",
+  "blocks": [
+    {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": ":hammer_and_pick: Starting build for <$CIRCLE_REPOSITORY_URL/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1>"
+      }
+    }
+  ],
+  "attachments": [
+      {
+          "color": "#D3D3D3",
+          "title": "CircleCI Build",
+          "title_link": "$CIRCLE_BUILD_URL",
+          "fields": [
+              {
+                  "title": "Author",
+                  "value": "$CIRCLE_PR_USERNAME",
+                  "short": false
+              },
+              {
+                  "title": "Diff",
+                  "value": "$CIRCLE_COMPARE_URL",
+                  "short": false
+              }
+          ]
+      }
+  ]
+}
+
