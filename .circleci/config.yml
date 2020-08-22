@@ -45,10 +45,22 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\"Merging config to STAGING for $CIRCLE_PROJECT_REPONAME:$CIRCLE_SHA1\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
+  release_staging:
+    docker:
+      - image: argoproj/argocd:v1.6.0
+    steps:
+      - run: |
+          argocd login
+
+          echo "Running as ArgoCD User:"
+          argocd account get-user-info --plaintext
+          
+          argocd app sync $CIRCLE_PROJECT_REPONAME-staging --plaintext
+          argocd app wait $CIRCLE_PROJECT_REPONAME-staging --health --plaintext
 workflows:
   version: 2
   default:
@@ -68,6 +80,13 @@ workflows:
           context: publish
           requires:
             - publish_config
+          filters:
+            branches:
+              only: master
+      - release_staging:
+          context: publish
+          requires:
+            - merge_staging
           filters:
             branches:
               only: master
