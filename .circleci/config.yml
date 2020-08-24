@@ -46,7 +46,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config to STAGING for <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: $CIRCLE_PROJECT_REPONAME -> Staging | <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
@@ -55,12 +55,27 @@ jobs:
       - image: argoproj/argocd:v1.6.0
     steps:
       - run: |
-          echo "Running as ArgoCD User:"
-          argocd account get-user-info --grpc-web
-          
           argocd app sync $CIRCLE_PROJECT_REPONAME-staging --grpc-web
           argocd app wait $CIRCLE_PROJECT_REPONAME-staging --health --grpc-web
-          echo $?
+  merge_production:
+    docker:
+      - image: ryanwholey/merge-release:latest
+    steps:
+      - run: |
+          curl -X POST \
+            -H "Content-type: application/json" \
+            -H "Authorization: Bearer $SLACK_APP_TOKEN" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: $CIRCLE_PROJECT_REPONAME -> Production | <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}>\"}" \
+            https://slack.com/api/chat.postMessage
+      - run: |
+          /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config production
+  release_production:
+    docker:
+      - image: argoproj/argocd:v1.6.0
+    steps:
+      - run: |
+          argocd app sync $CIRCLE_PROJECT_REPONAME-production --grpc-web
+          argocd app wait $CIRCLE_PROJECT_REPONAME-production --health --grpc-web
 workflows:
   version: 2
   default:
@@ -87,6 +102,20 @@ workflows:
           context: publish
           requires:
             - merge_staging
+          filters:
+            branches:
+              only: master
+      - merge_production:
+          context: publish
+          requires:
+            - release_staging
+          filters:
+            branches:
+              only: master
+      - release_production:
+          context: publish
+          requires:
+            - merge_production
           filters:
             branches:
               only: master
