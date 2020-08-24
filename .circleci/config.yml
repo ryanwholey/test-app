@@ -34,7 +34,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging config for <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> to config repo\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":package: Pushing config for <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> to config repo\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /update-git-config.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config $CIRCLE_SHA1
@@ -46,7 +46,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> config to staging. Waiting for stabalization.\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> config to staging. Waiting for stabilization.\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config staging
@@ -65,7 +65,7 @@ jobs:
           curl -X POST \
             -H "Content-type: application/json" \
             -H "Authorization: Bearer $SLACK_APP_TOKEN" \
-            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> config to production. Waiting for stabalization.\"}" \
+            --data "{\"channel\":\"$SLACK_CHANNEL_ID\",\"text\":\":merge: Merging <https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1|$CIRCLE_PROJECT_REPONAME:${CIRCLE_SHA1:0:7}> config to production. Waiting for stabilization.\"}" \
             https://slack.com/api/chat.postMessage
       - run: |
           /merge-release.sh $CIRCLE_PROJECT_USERNAME $CIRCLE_PROJECT_REPONAME-config production
