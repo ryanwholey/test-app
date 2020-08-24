@@ -28,6 +28,6 @@
 EOF
 
 git add .
-git commit -am Update
+git commit -am "$(echo $@)"
 git push
 
