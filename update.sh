@@ -18,7 +18,7 @@
       <div class="container">
         <div class="row">
           <div class="column">
-            <h2 class="section" style="padding-top: 20px; display: flex; justify-content: center;">@$</h2>
+            <h2 class="section" style="padding-top: 20px; display: flex; justify-content: center;">$@</h2>
           </div>
         </div>
       </div>
@@ -28,6 +28,6 @@
 EOF
 
 git add .
-git commit -am "Update"
+git commit -am Update
 git push
 
