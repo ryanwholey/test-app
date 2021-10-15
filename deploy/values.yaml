@@ -1,3 +1,5 @@
 test-app-helm:
   image:
     image: test-app-arm64
+  ingress:
+    enabled: false
