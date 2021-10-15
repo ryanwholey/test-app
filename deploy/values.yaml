@@ -1,2 +1,3 @@
-image:
-  image: test-app-arm64
+test-app-helm:
+  image:
+    image: test-app-arm64
