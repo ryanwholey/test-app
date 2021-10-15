@@ -25,4 +25,4 @@ appVersion: "1.0"
 dependencies:
 - name: test-app-helm
   version: master
-  repository: git@github.com:ryanwholey/test-app-helm
+  repository: https://github.com/ryanwholey/test-app-helm
